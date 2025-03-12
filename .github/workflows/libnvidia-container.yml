@@ -58,7 +58,7 @@ jobs:
         docker run --rm \
           -v ${{ github.workspace }}/output:/tmp \
           -e LIBNVIDIA_VERSION=${LIBNVIDIA_VERSION} \
-          ghcr.io/ich777/libnvidia-container:18.04
+          ghcr.io/unraid/libnvidia-container:18.04
 
     - name: Create Release
       if: env.CREATE_RELEASE == 'true' && success()
