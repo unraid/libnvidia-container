@@ -1,11 +1,11 @@
 name: libnvidia-container
 
 on:
-   Set schedule to run every 4 hours
+  # Set schedule to run every 4 hours
   schedule:
     - cron: '0 */4 * * *'
 
-   Allow to trigger action manually
+  # Allow to trigger action manually
   workflow_dispatch:
 
 jobs:
