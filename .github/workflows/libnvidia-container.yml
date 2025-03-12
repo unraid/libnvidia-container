@@ -1,7 +1,7 @@
-name: libnvidia-container
+name: libnvidia-container Check
 
 on:
-  # Set schedule to run every 4 hours
+  # Set schedule to run every 6 hours
   schedule:
     - cron: '0 */6 * * *'
 
