@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -41,6 +41,8 @@ CMD bash -c "cd ${DATA_DIR} && \
   git checkout v${LIBNVIDIA_VERSION} && \
   sed -i '/if (syscall(SYS_pivot_root, ".", ".") < 0)/,+1 d' ${DATA_DIR}/libnvidia-container/src/nvc_ldcache.c && \
   sed -i '/if (umount2(".", MNT_DETACH) < 0)/,+1 d' ${DATA_DIR}/libnvidia-container/src/nvc_ldcache.c && \
+  make GO111MODULE=auto || true; \
+  mv ${DATA_DIR}/libnvidia-container/deps/src/elftoolchain-0.7.1/libelf/'name libelf.so.1' ${DATA_DIR}/libnvidia-container/deps/src/elftoolchain-0.7.1/libelf/libelf.so.1 && \
   DESTDIR=${DATA_DIR}/libnvidia-container-${LIBNVIDIA_VERSION} make LIB_VERSION=${LIBNVIDIA_VERSION} LIB_TAG=${LIBNVIDIA_VERSION} install prefix=/usr GO111MODULE=auto && \
   mkdir -p ${DATA_DIR}/libnvidia-container-${LIBNVIDIA_VERSION}/etc/docker && \
   cp /opt/daemon.json ${DATA_DIR}/libnvidia-container-${LIBNVIDIA_VERSION}/etc/docker/daemon.json && \
