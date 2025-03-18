@@ -22,7 +22,8 @@ jobs:
       run: |
         # Grab latest libnvidia-container release from official repostiory and latest compiled release version from this repostiory
         LATEST_LIBNVIDIA="$(curl -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} -s https://api.github.com/repos/NVIDIA/libnvidia-container/releases/latest | jq -r '.tag_name' | sed 's/^v//')"
-        CURRENT_LIBNVIDIA="$(curl -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} -s https://api.github.com/repos/unraid/libnvidia-container/releases/latest | jq -r '.tag_name' | sed 's/^v//')"
+        CURRENT_LIBNVIDIA=1.17.4
+        #CURRENT_LIBNVIDIA="$(curl -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} -s https://api.github.com/repos/unraid/libnvidia-container/releases/latest | jq -r '.tag_name' | sed 's/^v//')"
 
         # Check if one of the versions is empty
         if ! echo "${LATEST_LIBNVIDIA}" | grep -qE '^\b[0-9]+(\.[0-9]+)*\b$'; then
