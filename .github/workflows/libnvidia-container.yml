@@ -21,7 +21,7 @@ jobs:
     - name: Check libnvidia-container versions
       run: |
         # Grab latest libnvidia-container release from official repostiory and latest compiled release version from this repostiory
-        LATEST_LIBNVIDIA="$(curl -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} -s https://api.github.com/repos/NVIDIA/libnvidia-container/releases/latest | jq -r '.tag_name' | sed 's/^v//')"
+        LATEST_LIBNVIDIA="$(curl -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} -s https://api.github.com/repos/NVIDIA/libnvidia-container/tags | jq -r '.[] | select(.name | test("-(rc|beta|alpha)"; "i") | not) | .name' | sort -V | tail -1 | sed 's/^v//')"
         CURRENT_LIBNVIDIA="$(curl -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} -s https://api.github.com/repos/unraid/libnvidia-container/releases/latest | jq -r '.tag_name' | sed 's/^v//')"
 
         # Check if one of the versions is empty
