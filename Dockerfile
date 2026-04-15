@@ -3,6 +3,7 @@ FROM debian:buster-slim
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   apt-utils \
+  wget \
   bmake \
   build-essential \
   bzip2 \
@@ -23,8 +24,8 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 
 ENV OS_ARCH="amd64"
-ENV GOLANG_VERSION="1.22.5"
-RUN curl https://storage.googleapis.com/golang/go${GOLANG_VERSION}.linux-${OS_ARCH}.tar.gz | tar -C /usr/local -xz
+ENV GOLANG_VERSION="1.25.6"
+RUN wget -qO- https://go.dev/dl/go${GOLANG_VERSION}.linux-${OS_ARCH}.tar.gz | tar -C /usr/local -xz
 ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
 ENV DATA_DIR=/tmp
@@ -39,8 +40,6 @@ CMD bash -c "cd ${DATA_DIR} && \
   git clone --depth 1 --branch v${LIBNVIDIA_VERSION} https://github.com/NVIDIA/libnvidia-container.git && \
   cd ${DATA_DIR}/libnvidia-container && \
   git checkout v${LIBNVIDIA_VERSION} && \
-  sed -i '/if (syscall(SYS_pivot_root, \".\", \".\") < 0)/,+1 d' ${DATA_DIR}/libnvidia-container/src/nvc_ldcache.c && \
-  sed -i '/if (umount2(\".\", MNT_DETACH) < 0)/,+1 d' ${DATA_DIR}/libnvidia-container/src/nvc_ldcache.c && \
   DESTDIR=${DATA_DIR}/libnvidia-container-${LIBNVIDIA_VERSION} make LIB_VERSION=${LIBNVIDIA_VERSION} LIB_TAG=${LIBNVIDIA_VERSION} install prefix=/usr GO111MODULE=auto && \
   mkdir -p ${DATA_DIR}/libnvidia-container-${LIBNVIDIA_VERSION}/etc/docker && \
   cp /opt/daemon.json ${DATA_DIR}/libnvidia-container-${LIBNVIDIA_VERSION}/etc/docker/daemon.json && \
